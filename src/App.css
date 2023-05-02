@@ -40,3 +40,16 @@
 .read-the-docs {
   color: #888;
 }
+
+.process-card {
+  padding: 10px;
+  color: rgb(226, 201, 171);
+  width: 200px;
+  margin: 20px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+
+}
+
+.process-card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}

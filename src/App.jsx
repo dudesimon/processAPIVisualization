@@ -1,33 +1,62 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Operation from "./components/Operation"
+import "./App.css"
+import Code from "./structures/Code.class"
+import Line from "./structures/Line.class"
+import { useEffect, useState } from "react"
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const codeBlocks = [
+    new Code([
+      new Line("printf('hello')", 0),
+      new Line("printf('exiting')", 0)
+    ], "Print"),
+    new Code([
+      new Line("if(x === 4) {", 0),
+      new Line("printf('hi')", 1),
+      new Line("}", 0)
+    ], "Show Multi-line"),
+    new Code([
+      new Line("printf('hello')", 0),
+      new Line("printf('exiting')", 0)
+    ], "Print"),
+  ]
+  const [currentBlock, setCurrentBlock] = useState(0)
+  const [currentLine, setCurrentLine] = useState(0)
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      if(currentBlock >= 0) {
+        if(currentLine + 1 < codeBlocks[currentBlock].lines.length) {
+          setCurrentLine(prevCurrentLine => prevCurrentLine + 1)
+        } else {
+          setCurrentLine(0)
+          if(currentBlock + 1 < codeBlocks.length) {
+            setCurrentBlock(prevCurrentBlock => prevCurrentBlock + 1)
+          } else {
+            setCurrentBlock(-1)
+            clearInterval(id)
+          }
+        }
+      }
+      
+    }, 1000)
+
+    return () => {
+      clearTimeout(id)
+    }
+  }, [codeBlocks, currentBlock, currentLine])
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      { codeBlocks.map((codeBlock, index) => {
+        return (
+          <Operation 
+            key={index} 
+            code={codeBlock} 
+            current_line={currentBlock === index ? currentLine : -1} 
+          />
+        )
+      })}
     </>
   )
 }

@@ -1,7 +1,8 @@
 class Line {
-    constructor(data, indentationLevel) {
+    constructor(data, indentationLevel, callback) {
         this.data = data
         this.indentationLevel = indentationLevel
+        this.callback = callback
     }
 
     getLine() {
@@ -10,6 +11,10 @@ class Line {
             string += "\t"
         }
         return string + this.data
+    }
+
+    execute() {
+        this.callback()
     }
 }
 

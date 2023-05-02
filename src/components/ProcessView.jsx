@@ -1,38 +1,31 @@
 import PropTypes from "prop-types"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import Operation from "../components/Operation"
 
 const ProcessView = (props) =>{
-    const {codeBlocks} = props
-    const [currentBlock, setCurrentBlock] = useState(0)
+  const {codeBlocks} = props
+  const [currentBlock, setCurrentBlock] = useState(0)
   const [currentLine, setCurrentLine] = useState(0)
 
-  useEffect(() => {
-    const id = setInterval(() => {
-      if(currentBlock >= 0) {
-        if(currentLine + 1 < codeBlocks[currentBlock].lines.length) {
-          setCurrentLine(prevCurrentLine => prevCurrentLine + 1)
+  const next = () => {
+    if(currentBlock >= 0) {
+      if(currentLine + 1 < codeBlocks[currentBlock].lines.length) {
+        setCurrentLine(prevCurrentLine => prevCurrentLine + 1)
+      } else {
+        setCurrentLine(0)
+        if(currentBlock + 1 < codeBlocks.length) {
+          setCurrentBlock(prevCurrentBlock => prevCurrentBlock + 1)
         } else {
-          setCurrentLine(0)
-          if(currentBlock + 1 < codeBlocks.length) {
-            setCurrentBlock(prevCurrentBlock => prevCurrentBlock + 1)
-          } else {
-            setCurrentBlock(-1)
-            clearInterval(id)
-          }
+          setCurrentBlock(-1)
         }
       }
-      
-    }, 1000)
-
-    return () => {
-      clearTimeout(id)
     }
-  }, [codeBlocks, currentBlock, currentLine])
+  }
 
   return (
     <>
       { codeBlocks.map((codeBlock, index) => {
+        console.log("Building a new operation...")
         return (
           <Operation 
             key={index} 
@@ -41,6 +34,7 @@ const ProcessView = (props) =>{
           />
         )
       })}
+      <button onClick={() => next()}>Next Step</button>
     </>
   )
 }

@@ -6,23 +6,26 @@ import { useState } from "react"
 
 const App = () => {
   const [view, setView] = useState("process")
-  
+  console.log("RENDERED APP!")
   if(view === "process") {
     return(
       <div>
         <ProcessView codeBlocks={[
           new Code([
             new Line(
-              "printf('hi')",
-              0
+              "printf('1', getRandomNumber())",
+              0,
+              () => console.log('1', Math.random())
             ),
             new Line(
-              "printf('hi')",
-              0
+              "printf('2')",
+              0,
+              () => console.log('2', Math.random())
             ),
             new Line(
-              "printf('hi')",
-              0
+              "printf('3')",
+              0,
+              () => console.log('3', Math.random())
             )
           ],
           "Code Block Description Here...")

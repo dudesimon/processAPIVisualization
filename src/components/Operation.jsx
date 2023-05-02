@@ -10,6 +10,7 @@ const Operation = (props) => {
                     return (
                         <div key={`line-${index}`}>
                             <pre><span>{ current_line === index && "➡️" } { index }</span> { line.getLine() }</pre>
+                            { current_line === index && line.execute() }
                         </div>
                     )
                 })

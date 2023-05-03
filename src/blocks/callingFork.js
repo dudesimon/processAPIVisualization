@@ -1,7 +1,7 @@
 import Code from "../structures/Code.class";
 import Line from "../structures/Line.class";
 
-const callingFork = new Code([
+const callingFork = (setTerminalOut, setProcesses) => new Code([
     new Line(
         "int main(int argc, char *argv[]) {",
         0,

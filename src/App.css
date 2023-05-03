@@ -14,13 +14,21 @@ span {
 
 .process-card {
   padding: 10px;
-  color: rgb(226, 201, 171);
-  width: 200px;
-  margin: 20px;
+  color: black;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-
+  background: yellow;
 }
 
 .process-card:hover {
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.split {
+  display: flex;
+  gap: 5px;
+  padding: 0;
+}
+
+pre {
+  margin-top: -10px;
 }

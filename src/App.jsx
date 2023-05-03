@@ -1,28 +1,51 @@
 import "./App.css"
-import Code from "./structures/Code.class"
-import Line from "./structures/Line.class"
 import ProcessView from "./components/ProcessView"
-import { useState } from "react"
 import callingFork from "./blocks/callingFork"
+import ProcessCard from "./components/ProcessCard"
+import { useState } from "react"
 
 const App = () => {
-  const [view, setView] = useState("process")
-  console.log("RENDERED APP!")
-  if(view === "process") {
-    return(
-      <div>
-        <ProcessView codeBlocks={[callingFork]} />
-        <button onClick={() => setView("view")}>Change View!</button>
+  const [terminalOut, setTerminalOut] = useState([])
+  const [processes, setProcesses] = useState([
+    { 
+      pid: 1,
+      startup: true,
+      scriptName: "testingFork",
+      fileName: "p1.c",
+      returnFromFork: "N/A",
+    }
+  ])
+  return(
+    <>
+      <div className="split">
+      <div className="left">
+        <ProcessView codeBlocks={[callingFork(setTerminalOut, setProcesses)]} />
       </div>
-    )
-  } else {
-    return (
-      <>
-        <p>Viewing something else!</p>
-        <button onClick={() => setView("process")}>Change View!</button>
-      </>
-    )
-  }
+      <div className="right">
+        {
+          processes.map((process, index) => {
+            return <ProcessCard
+              key={`process-${index}`}
+              pid={process.pid} 
+              startup={process.startup} 
+              scriptName={process.scriptName} 
+              fileName={process.fileName} 
+              returnResultFromFork={process.returnFromFork}
+            />
+          })
+        }
+      </div>
+    </div>
+    <div className="terminal">
+        {
+          terminalOut.map((value, index) => {
+            <p key={`terminal-${index}`}>{ value }</p>
+          })
+        }
+    </div>
+    </>
+    
+  )
 }
 
 export default App

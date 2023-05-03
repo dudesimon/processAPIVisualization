@@ -1,46 +1,44 @@
 import PropTypes from "prop-types"
-import { useState } from "react"
 import Operation from "../components/Operation"
 
-const ProcessView = (props) =>{
-  const {codeBlocks} = props
-  const [currentBlock, setCurrentBlock] = useState(0)
-  const [currentLine, setCurrentLine] = useState(0)
+const ProcessView = (props) => {
+    const { codeBlock, isSplit, parentCurrentLine, childCurrentLine, setParentCurrentLine, setChildCurrentLine, parentIsWaiting, isDone } = props
 
-  const next = () => {
-    if(currentBlock >= 0) {
-      if(currentLine + 1 < codeBlocks[currentBlock].lines.length) {
-        setCurrentLine(prevCurrentLine => prevCurrentLine + 1)
-      } else {
-        setCurrentLine(0)
-        if(currentBlock + 1 < codeBlocks.length) {
-          setCurrentBlock(prevCurrentBlock => prevCurrentBlock + 1)
-        } else {
-          setCurrentBlock(-1)
+    const next = () => {
+        if (!parentIsWaiting) {
+            if (parentCurrentLine + 1 < codeBlock.lines.length) {
+                codeBlock.lines[parentCurrentLine + 1].execute()
+                setParentCurrentLine(prevCurrentLine => prevCurrentLine + 1)
+            } else {
+                setParentCurrentLine(-1)
+            }
         }
-      }
-    }
-  }
 
-  return (
-    <>
-      { codeBlocks.map((codeBlock, index) => {
-        console.log("Building a new operation...")
-        return (
-          <Operation 
-            key={index} 
-            code={codeBlock} 
-            current_line={currentBlock === index ? currentLine : -1} 
-          />
-        )
-      })}
-      <button onClick={() => next()}>Next Step</button>
-    </>
-  )
+        if (isSplit) {
+            if (childCurrentLine + 1 < codeBlock.lines.length) {
+                codeBlock.lines[childCurrentLine + 1].execute()
+                setChildCurrentLine(prevCurrentLine => prevCurrentLine + 1)
+            } else {
+                setChildCurrentLine(-1)
+            }
+        }
+    }
+
+    return (
+        <>
+            <Operation
+                code={codeBlock}
+                parent_current_line={parentCurrentLine}
+                child_current_line={childCurrentLine}
+                is_split={isSplit}
+            />
+            <button onClick={() => next()} disabled={isDone}>Next Step</button>
+        </>
+    )
 }
 
 ProcessView.propTypes = {
-    codeBlocks: PropTypes.any.isRequired,
+    codeBlock: PropTypes.any.isRequired,
 }
 
 export default ProcessView

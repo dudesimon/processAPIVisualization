@@ -1,7 +1,7 @@
 import PropTypes from "prop-types"
 
 const Operation = (props) => {
-    const { code, current_line } = props 
+    const { code, is_split, parent_current_line, child_current_line } = props 
     return (
         <div className="operation">
             <h1>{ code.description }</h1>
@@ -9,8 +9,7 @@ const Operation = (props) => {
                 code.lines.map((line, index) => {
                     return (
                         <div key={`line-${index}`}>
-                            <pre><span>{ current_line === index && "➡️" } { index }</span> { line.getLine() }</pre>
-                            { current_line === index && line.execute() }
+                            <pre><span>{ parent_current_line === index && is_split && "P ➡️" } { child_current_line === index && is_split && "C ➡️"} { parent_current_line === index && !is_split && "➡️"} { index }</span> { line.getLine() }</pre>
                         </div>
                     )
                 })
@@ -21,7 +20,8 @@ const Operation = (props) => {
 
 Operation.propTypes = {
     code: PropTypes.any.isRequired, // should be of class type Code
-    current_line: PropTypes.number.isRequired
+    parent_current_line: PropTypes.number.isRequired,
+    child_current_line: PropTypes.number.isRequired,
 }
 
 export default Operation

@@ -32,3 +32,12 @@ span {
 pre {
   margin-top: -10px;
 }
+
+.right {
+  display: flex;
+  gap: 10px;
+}
+
+.right > * {
+  height: fit-content;
+}

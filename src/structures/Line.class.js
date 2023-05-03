@@ -3,6 +3,7 @@ class Line {
         this.data = data
         this.indentationLevel = indentationLevel
         this.callback = callback
+        this.hasRun = false
     }
 
     getLine() {
